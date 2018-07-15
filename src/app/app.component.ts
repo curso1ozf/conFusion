@@ -4,8 +4,9 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
   template: `
-    <mat-toolbar color="primary"> <span>Ristorante Con Fusion</span> </mat-toolbar>
+    <app-header></app-header>
     <app-menu></app-menu>
+    <app-footer></app-footer>
   `,
   styles: []
 })
