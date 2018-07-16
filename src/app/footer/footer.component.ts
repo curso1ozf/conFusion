@@ -59,7 +59,7 @@ import { Component, OnInit } from '@angular/core';
   }
   
   .footer{
-      background-color: $background-pale;
+      background-color: #D1C4E9;
       @include zero-margin(20px, 0px);
   }
   

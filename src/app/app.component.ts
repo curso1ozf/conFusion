@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 
 
+
 @Component({
   selector: 'app-root',
   template: `
     <app-header></app-header>
-    <app-menu></app-menu>
+    <router-outlet></router-outlet>
     <app-footer></app-footer>
   `,
   styles: []
