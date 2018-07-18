@@ -1,13 +1,9 @@
-import { CommentClass } from './comment';
-
-export class DishClass {
+export class PromotionClass {
     id: number;
     name: string;
     image: string;
-    category: string;
     label: string;
     price: string;
     featured: boolean;
     description: string;
-    comments: CommentClass [];
 }

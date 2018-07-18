@@ -5,10 +5,10 @@ import { Component, OnInit } from '@angular/core';
   template: `
   <mat-toolbar color="primary">
     <span><img src="/assets/images/logo.png" height=30 width=41></span>
-    <a mat-button routerLink="home"><span class="fa fa-home fa-lg"></span> Home</a>
-    <a mat-button><span class="fa fa-info fa-lg"></span> About</a>
-    <a mat-button routerLink="menu"><span class="fa fa-list fa-lg"></span> Menu</a>
-    <a mat-button><span class="fa fa-address-card fa-lg"></span> Contact</a>
+    <a mat-button routerLink="home" routerLinkActive="active"><span class="fa fa-home fa-lg"></span> Home</a>
+    <a mat-button routerLinkActive="active"><span class="fa fa-info fa-lg"></span> About</a>
+    <a mat-button routerLink="menu" routerLinkActive="active"><span class="fa fa-list fa-lg"></span> Menu</a>
+    <a mat-button routerLink="contact" routerLinkActive="active"><span class="fa fa-address-card fa-lg"></span> Contact</a>
   </mat-toolbar>
 
   <div class="container jumbotron"
@@ -48,6 +48,10 @@ import { Component, OnInit } from '@angular/core';
           color:floralwhite;
           min-height: 150px;
       }  
+
+      .active {
+          background: #4527A0;
+      }
   `]
 })
 export class HeaderComponent implements OnInit {
