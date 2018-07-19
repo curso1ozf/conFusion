@@ -1,17 +1,23 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DishClass } from "../shared/dish";
+
+import { Location } from "@angular/common";
+import { ActivatedRoute, Params } from "@angular/router";
+
+import { DishService } from "../services/dish.service";
 
 
 @Component({
   selector: 'app-dishdetail',
   template: `
-    <div *ngIf="dish" class="container" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutAlign.gt-md="space-around center">
+    <div class="container" fxLayout="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutAlign.gt-md="space-around center">
       <div fxFlex>
         <mat-card>
           <mat-card-title> {{ dish.name }} </mat-card-title>
           <img mat-card-image src="{{ dish.image }}" height="400px">
           <mat-card-content> {{ dish.description }} </mat-card-content>
           <mat-card-actions>
+            <button mat-button (click)="goBack()">BACK</button>
             <button mat-button>LIKE</button>
             <button mat-button>SHARE</button>
           </mat-card-actions>
@@ -36,11 +42,20 @@ import { DishClass } from "../shared/dish";
   styles: []
 })
 export class DishdetailComponent implements OnInit {
-  @Input()
+  
   dish: DishClass;
-  constructor() { }
+  constructor( 
+    private dishservice: DishService,
+    private location: Location,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit() {
+    const id = +this.route.snapshot.params['id'];
+    this.dish = this.dishservice.getDish(id);
   }
 
+  goBack(): void {
+    this.location.back();
+  }
 }

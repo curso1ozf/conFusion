@@ -15,7 +15,7 @@ import { DishService } from '../services/dish.service';
     
     <div fxFlex>
       <mat-grid-list cols="2" rowHeight="200px">
-        <mat-grid-tile *ngFor="let dish of dishes" (click)="onSelected(dish)">
+        <mat-grid-tile *ngFor="let dish of dishes" [routerLink]="['/dishdetail',dish.id]">
           <img height="200px" src={{dish.image}} alt={{dish.name}}>
           <mat-grid-tile-footer>
             <h1 matLine>{{dish.name | uppercase}}</h1>
@@ -23,8 +23,6 @@ import { DishService } from '../services/dish.service';
         </mat-grid-tile>
       </mat-grid-list>
     </div>
-
-    <app-dishdetail [dish]="selectedDish"></app-dishdetail>
   `,
   styles: []
 })
@@ -34,7 +32,6 @@ import { DishService } from '../services/dish.service';
 export class MenuComponent implements OnInit {
 
   dishes: DishClass[];
-  selectedDish: DishClass;
 
   constructor( private dishService: DishService) { }
 
@@ -42,9 +39,6 @@ export class MenuComponent implements OnInit {
     this.dishes= this.dishService.getDishes();
   }
 
-  onSelected(dish: DishClass){
-    this.selectedDish=dish;
-  }
 
   
 
