@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 
 import { DishClass } from '../shared/dish';
 import { PromotionClass } from '../shared/promotion';
+import { LeaderClass } from '../shared/leader';
 
 import { DishService } from '../services/dish.service';
 import { PromotionService } from '../services/promotion.service'; 
+import { LeaderService } from '../services/leader.service';
 
 @Component({
   selector: 'app-home',
@@ -44,6 +46,20 @@ import { PromotionService } from '../services/promotion.service';
       </mat-card-content>
       </mat-card>
 
+      <mat-card *ngIf="leader" fxFlex>
+      <mat-card-header>
+      <div mat-card-avatar></div>
+      <mat-card-title>
+        <h3>{{leader.name | uppercase}}</h3>
+      </mat-card-title>
+      </mat-card-header>
+      <img mat-card-image src={{leader.image}} alt={{promotion.name}}>
+      <mat-card-content>
+      <p>{{leader.description}}
+      </p>
+      </mat-card-content>
+      </mat-card>
+
     </div>
   `,
   styles: []
@@ -52,12 +68,18 @@ export class HomeComponent implements OnInit {
 
   dish: DishClass;
   promotion: PromotionClass;
+  leader: LeaderClass
 
-  constructor(private dishService: DishService, private promotionService: PromotionService) { }
+  constructor(
+      private dishService: DishService, 
+      private promotionService: PromotionService, 
+      private leaderservice: LeaderService
+  ){ }
 
   ngOnInit() {
-    this.dish = this.dishService.getDish(0);
-    this.promotion = this.promotionService.getPromotion(0);
+    this.dish = this.dishService.getDishFeatured();
+    this.promotion = this.promotionService.getPromotionFeatured();
+    this.leader = this.leaderservice.getLeaderFeatured();
   }
 
 }
