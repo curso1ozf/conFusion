@@ -10,16 +10,18 @@ import { MatFormFieldControl } from '@angular/material';
       <span class="flex-spacer"></span>
       <button mat-button mat-dialog-close>&times;</button>
     </mat-toolbar>
-    <form novalidate (ngSubmit)="onSubmit()">
+    <form #formLogin="ngForm" novalidate (ngSubmit)="onSubmit()">
       <mat-dialog-content >
         <p> 
           <mat-form-field >
-          <input matInput placeholder="Username" [(ngModel)]="user.username" type="text" name="username" required >
+            <input matInput placeholder="Username" [(ngModel)]="user.username" type="text" name="username" #username="ngModel" required >
+            <mat-error *ngIf="username.errors?.required">username is required</mat-error>
           </mat-form-field>  
         </p>      
         <p>
           <mat-form-field>
-            <input matInput placeholder="Password" [(ngModel)]="user.password" type="password" name="password" required >
+            <input matInput placeholder="Password" [(ngModel)]="user.password" type="password" name="password" #password="ngModel" required >
+            <mat-error *ngIf="password.errors?.required">password is required</mat-error>
           </mat-form-field>
         </p>
         <p>      
@@ -29,7 +31,7 @@ import { MatFormFieldControl } from '@angular/material';
       <mat-dialog-actions>
         <span class="flex-spacer"></span>
         <button mat-button mat-dialog-close>Cancel </button>
-        <button color="primary" type="submit" mat-button>Login</button>
+        <button [disabled]="formLogin.form.invalid"  class="background-primary text-floral-white" type="submit" mat-button>Login</button>
       </mat-dialog-actions>
     </form>
    
