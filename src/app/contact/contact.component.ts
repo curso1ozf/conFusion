@@ -45,39 +45,44 @@ import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms'
     </div>
     <div fxFlex="50" fxFlexOffset="20px" class="form-size">
       <h3>Leave your feedback </h3>
-        <form novalidate [formGroup]="feedbackForm" class="form-size">
-          <p class="center-alignment">
-            <mat-form-field class="half-width">
-              <input matInput formControlName="firstname" placeholder="First Name" type="text" required>
-            </mat-form-field>
-            <mat-form-field class="half-width">
-              <input matInput formControlName="lastname" placeholder="Last Name" type="text" required>
-            </mat-form-field>
-          </p>
-          <p class="center-alignment">
-            <mat-form-field class="half-width">
-              <input matInput formControlName="telnum" placeholder="Telephone Number" type="tel" required>
-            </mat-form-field>
-            <mat-form-field class="half-width">
-              <input matInput formControlName="email" placeholder="Email" type="email" required>
-            </mat-form-field>
-          </p>
-          <p class="center-alignment">
-              <mat-slide-toggle formControlName="agree">May we contact you?</mat-slide-toggle>
+        <form novalidate [formGroup]="feedbackForm" class="form-size" (submit)="onSubmit()">
+          <mat-dialog-content>
+            <p class="center-alignment">
               <mat-form-field class="half-width">
-                <mat-select formControlName="contacttype" placeholder="How">
-                  <mat-option *ngFor="let ctype of contactTypeList" [value]="ctype">
-                    {{ ctype }}
-                  </mat-option>
-                </mat-select >
+                <input matInput formControlName="firstname" placeholder="First Name" type="text" required>
               </mat-form-field>
-          </p>
-          <p class="center-alignment">
-            <mat-form-field class="full-width">
-              <textarea matInput formControlName="message" placeholder="Your message" rows=5>
-              </textarea>
-            </mat-form-field>
-          </p>
+              <mat-form-field class="half-width">
+                <input matInput formControlName="lastname" placeholder="Last Name" type="text" required>
+              </mat-form-field>
+            </p>
+            <p class="center-alignment">
+              <mat-form-field class="half-width">
+                <input matInput formControlName="telnum" placeholder="Telephone Number" type="tel" required>
+              </mat-form-field>
+              <mat-form-field class="half-width">
+                <input matInput formControlName="email" placeholder="Email" type="email" required>
+              </mat-form-field>
+            </p>
+            <p class="center-alignment">
+                <mat-slide-toggle formControlName="agree">May we contact you?</mat-slide-toggle>
+                <mat-form-field class="half-width">
+                  <mat-select formControlName="contacttype" placeholder="How">
+                    <mat-option *ngFor="let ctype of contactTypeList" [value]="ctype">
+                      {{ ctype }}
+                    </mat-option>
+                  </mat-select >
+                </mat-form-field>
+            </p>
+            <p class="center-alignment">
+              <mat-form-field class="full-width">
+                <textarea matInput formControlName="message" placeholder="Your message" rows=5>
+                </textarea>
+              </mat-form-field>
+            </p>
+        </mat-dialog-content>
+        <mat-dialog-actions>
+          <button mat-button type="submit" class="background-primary text-floral-white">Send</button>
+        </mat-dialog-actions>
         </form> 
       
     </div>
@@ -130,5 +135,12 @@ export class ContactComponent implements OnInit {
       contacttype: 'None',
       message: ''
     });
+  }
+
+  onSubmit(){
+    this.feedback=this.feedbackForm.value;
+    console.log(this.feedback);
+    this.feedbackForm.reset();
+    
   }
 }
