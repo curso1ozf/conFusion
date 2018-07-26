@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { feedBackClass,  contactType } from '../shared/feedback';
+
+import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-contact',
@@ -40,15 +43,92 @@ import { Component, OnInit } from '@angular/core';
         </div>
       </div>
     </div>
+    <div fxFlex="50" fxFlexOffset="20px" class="form-size">
+      <h3>Leave your feedback </h3>
+        <form novalidate [formGroup]="feedbackForm" class="form-size">
+          <p class="center-alignment">
+            <mat-form-field class="half-width">
+              <input matInput formControlName="firstname" placeholder="First Name" type="text" required>
+            </mat-form-field>
+            <mat-form-field class="half-width">
+              <input matInput formControlName="lastname" placeholder="Last Name" type="text" required>
+            </mat-form-field>
+          </p>
+          <p class="center-alignment">
+            <mat-form-field class="half-width">
+              <input matInput formControlName="telnum" placeholder="Telephone Number" type="tel" required>
+            </mat-form-field>
+            <mat-form-field class="half-width">
+              <input matInput formControlName="email" placeholder="Email" type="email" required>
+            </mat-form-field>
+          </p>
+          <p class="center-alignment">
+              <mat-slide-toggle formControlName="agree">May we contact you?</mat-slide-toggle>
+              <mat-form-field class="half-width">
+                <mat-select formControlName="contacttype" placeholder="How">
+                  <mat-option *ngFor="let ctype of contactTypeList" [value]="ctype">
+                    {{ ctype }}
+                  </mat-option>
+                </mat-select >
+              </mat-form-field>
+          </p>
+          <p class="center-alignment">
+            <mat-form-field class="full-width">
+              <textarea matInput formControlName="message" placeholder="Your message" rows=5>
+              </textarea>
+            </mat-form-field>
+          </p>
+        </form> 
+      
+    </div>
   </div>
   `,
-  styles: []
+  styles: [`
+    .form-size {
+      width:75%
+    }
+
+    .full-width {
+      width:100%
+    }
+
+    .half-width {
+      width:45%
+    }
+
+    .center-alignment {
+      display:flex;
+      justify-content: space-between;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      -webkit-box-align: center;
+      align-items: center;
+      margin:20px;
+    }
+  `]
 })
 export class ContactComponent implements OnInit {
 
-  constructor() { }
+  feedbackForm: FormGroup;
+  feedback: feedBackClass;
+  contactTypeList = contactType;
+
+  constructor(private fb: FormBuilder) {
+    this.createForm();
+  }
 
   ngOnInit() {
   }
 
+  createForm(){
+    this.feedbackForm = this.fb.group({
+      firstname: new FormControl(),
+      lastname: '',
+      telnum:'',
+      email: '',
+      agree: false,
+      contacttype: 'None',
+      message: ''
+    });
+  }
 }
