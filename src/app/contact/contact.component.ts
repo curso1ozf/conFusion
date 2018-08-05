@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { feedBackClass,  contactType } from '../shared/feedback';
 
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
@@ -49,28 +49,34 @@ import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms'
           <mat-dialog-content>
             <p class="center-alignment">
               <mat-form-field class="half-width">
-                <input matInput formControlName="firstname" placeholder="First Name" type="text" required>
+                <input matInput formControlName="firstname" placeholder="First Name" type="text" >
+                <mat-error *ngIf="feedbackForm.get('firstname').hasError('required') && feedbackForm.get('firstname').touched">First name is required</mat-error>
               </mat-form-field>
               <mat-form-field class="half-width">
-                <input matInput formControlName="lastname" placeholder="Last Name" type="text" required>
+                <input matInput formControlName="lastname" placeholder="Last Name" type="text" >
+                <mat-error *ngIf="feedbackForm.get('lastname').hasError('required') && feedbackForm.get('lastname').touched">Last name is required</mat-error>
               </mat-form-field>
             </p>
             <p class="center-alignment">
               <mat-form-field class="half-width">
-                <input matInput formControlName="telnum" placeholder="Telephone Number" type="tel" required>
+                <input matInput formControlName="telnum" placeholder="Telephone Number" type="tel">
+                <mat-error *ngIf="feedbackForm.get('telnum').hasError('required') && feedbackForm.get('telnum').touched"> Telephone is required</mat-error>
               </mat-form-field>
               <mat-form-field class="half-width">
-                <input matInput formControlName="email" placeholder="Email" type="email" required>
+                <input matInput formControlName="email" placeholder="Email" type="email" >
+                <mat-error *ngIf="feedbackForm.get('email').hasError('required') && feedbackForm.get('email').touched"> Email is required</mat-error>
               </mat-form-field>
             </p>
             <p class="center-alignment">
                 <mat-slide-toggle formControlName="agree">May we contact you?</mat-slide-toggle>
+                <mat-error *ngIf="feedbackForm.get('agree').hasError('required') && feedbackForm.get('agree').touched"> Contact agreement is required</mat-error>
                 <mat-form-field class="half-width">
                   <mat-select formControlName="contacttype" placeholder="How">
                     <mat-option *ngFor="let ctype of contactTypeList" [value]="ctype">
                       {{ ctype }}
                     </mat-option>
                   </mat-select >
+                  <mat-error *ngIf="feedbackForm.get('contacttype').hasError('required') && feedbackForm.get('contacttype').touched"> Contact type is required</mat-error>
                 </mat-form-field>
             </p>
             <p class="center-alignment">
@@ -114,6 +120,8 @@ import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms'
 })
 export class ContactComponent implements OnInit {
 
+  @ViewChild('fform') feedbackFormDirective;
+  
   feedbackForm: FormGroup;
   feedback: feedBackClass;
   contactTypeList = contactType;
@@ -127,12 +135,12 @@ export class ContactComponent implements OnInit {
 
   createForm(){
     this.feedbackForm = this.fb.group({
-      firstname: new FormControl(),
-      lastname: '',
-      telnum:'',
-      email: '',
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      telnum:['', Validators.required],
+      email: ['', Validators.required],
       agree: false,
-      contacttype: 'None',
+      contacttype: ['None', Validators.required],
       message: ''
     });
   }
@@ -140,7 +148,16 @@ export class ContactComponent implements OnInit {
   onSubmit(){
     this.feedback=this.feedbackForm.value;
     console.log(this.feedback);
-    this.feedbackForm.reset();
+    this.feedbackForm.reset({
+      firstname: '',
+      lastname: '',
+      telnum: '',
+      email: '',
+      agree: false,
+      contacttype: 'None',
+      message: '' 
+    });
+    this.feedbackFormDirective.resetForm();
     
   }
 }

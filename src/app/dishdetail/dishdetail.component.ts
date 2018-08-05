@@ -13,7 +13,7 @@ import { DishService } from "../services/dish.service";
     <div class="container" fxLayout="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutAlign.gt-md="space-around center">
       <div fxFlex>
         <mat-card>
-          <mat-card-title> {{ dish.name }} </mat-card-title>
+          <mat-card-title> {{ dish.name | uppercase }} </mat-card-title>
           <img mat-card-image src="{{ dish.image }}" height="400px">
           <mat-card-content> {{ dish.description }} </mat-card-content>
           <mat-card-actions>
@@ -52,7 +52,7 @@ export class DishdetailComponent implements OnInit {
 
   ngOnInit() {
     const id = +this.route.snapshot.params['id'];
-    this.dish = this.dishservice.getDish(id);
+    this.dishservice.getDish(id).then(dish => this.dish = dish);
   }
 
   goBack(): void {
