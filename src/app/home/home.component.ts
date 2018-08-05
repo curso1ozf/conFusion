@@ -31,6 +31,10 @@ import { LeaderService } from '../services/leader.service';
       </p>
       </mat-card-content>
       </mat-card>
+      <div [hidden]="dish">
+        <mat-spinner></mat-spinner>
+        <h4>Loading . . . Please wait</h4>
+      </div>
 
       <mat-card *ngIf="promotion" fxFlex>
       <mat-card-header>
@@ -45,6 +49,10 @@ import { LeaderService } from '../services/leader.service';
       </p>
       </mat-card-content>
       </mat-card>
+      <div [hidden]="promotion">
+        <mat-spinner></mat-spinner>
+        <h4>Loading . . . Please wait</h4>
+      </div>
 
       <mat-card *ngIf="leader" fxFlex>
       <mat-card-header>
@@ -59,6 +67,10 @@ import { LeaderService } from '../services/leader.service';
       </p>
       </mat-card-content>
       </mat-card>
+      <div [hidden]="leader">
+        <mat-spinner></mat-spinner>
+        <h4>Loading . . . Please wait</h4>
+      </div>
 
     </div>
   `,

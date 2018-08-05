@@ -10,10 +10,14 @@ import { DishService } from "../services/dish.service";
 @Component({
   selector: 'app-dishdetail',
   template: `
-    <div class="container" fxLayout="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutAlign.gt-md="space-around center">
-      <div fxFlex>
+    <div [hidden]="dish">
+      <mat-spinner></mat-spinner>
+      <h4>Loading . . . Please wait</h4>
+    </div>
+    <div  class="container" fxLayout="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutAlign.gt-md="space-around center">
+      <div fxFlex *ngIf="dish">
         <mat-card>
-          <mat-card-title> {{ dish.name | uppercase }} </mat-card-title>
+          <mat-card-title> {{ dish.name | uppercase}} </mat-card-title>
           <img mat-card-image src="{{ dish.image }}" height="400px">
           <mat-card-content> {{ dish.description }} </mat-card-content>
           <mat-card-actions>
@@ -23,7 +27,7 @@ import { DishService } from "../services/dish.service";
           </mat-card-actions>
         </mat-card>
       </div>
-      <div fxFlex>
+      <div fxFlex *ngIf="dish">
         <div>
           <h2>Comments</h2>
         </div>
@@ -38,6 +42,7 @@ import { DishService } from "../services/dish.service";
         <div>
       </div>
     </div>
+    
   `,
   styles: []
 })

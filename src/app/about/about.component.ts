@@ -64,7 +64,7 @@ import { LeaderService } from '../services/leader.service';
     </div>
 
 
-    <div fxFlex>
+    <div fxFlex *ngIf="leaders">
       <h2>Corporate Leadership</h2>
       <mat-list>
         <mat-list-item *ngFor="let leader of leaders">
@@ -78,6 +78,10 @@ import { LeaderService } from '../services/leader.service';
           </p>
         </mat-list-item>
       </mat-list>
+    </div>
+    <div [hidden]="leaders">
+      <mat-spinner></mat-spinner>
+      <h4>Loading . . . Please wait</h4>
     </div>
   </div>
   `,

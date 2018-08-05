@@ -13,7 +13,7 @@ import { DishService } from '../services/dish.service';
         </div>
       </div>  
     
-    <div fxFlex>
+    <div fxFlex *ngIf="dishes">
       <mat-grid-list cols="2" rowHeight="200px">
         <mat-grid-tile *ngFor="let dish of dishes" [routerLink]="['/dishdetail',dish.id]">
           <img height="200px" src={{dish.image}} alt={{dish.name}}>
@@ -22,6 +22,10 @@ import { DishService } from '../services/dish.service';
           </mat-grid-tile-footer>
         </mat-grid-tile>
       </mat-grid-list>
+    </div>
+    <div [hidden]="dishes">
+      <mat-spinner></mat-spinner>
+      <h4>Loading . . . Please wait</h4>
     </div>
   `,
   styles: []
