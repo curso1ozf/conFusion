@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { feedBackClass,  contactType } from '../shared/feedback';
 
-import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, FormControl, EmailValidator } from '@angular/forms';
 
 @Component({
   selector: 'app-contact',
@@ -50,21 +50,21 @@ import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms'
             <p class="center-alignment">
               <mat-form-field class="half-width">
                 <input matInput formControlName="firstname" placeholder="First Name" type="text" >
-                <mat-error *ngIf="feedbackForm.get('firstname').hasError('required') && feedbackForm.get('firstname').touched">First name is required</mat-error>
+                <mat-error *ngIf="formErrors.firstname">{{formErrors.firstname}}</mat-error>
               </mat-form-field>
               <mat-form-field class="half-width">
                 <input matInput formControlName="lastname" placeholder="Last Name" type="text" >
-                <mat-error *ngIf="feedbackForm.get('lastname').hasError('required') && feedbackForm.get('lastname').touched">Last name is required</mat-error>
+                <mat-error *ngIf="formErrors.lastname">{{formErrors.lastname}}</mat-error>
               </mat-form-field>
             </p>
             <p class="center-alignment">
               <mat-form-field class="half-width">
-                <input matInput formControlName="telnum" placeholder="Telephone Number" type="tel">
-                <mat-error *ngIf="feedbackForm.get('telnum').hasError('required') && feedbackForm.get('telnum').touched"> Telephone is required</mat-error>
+                <input matInput formControlName="telnum" placeholder="Telephone Number" type="tel" pattern="[0-9]*">
+                <mat-error *ngIf="formErrors.telnum"> {{formErrors.telnum}}</mat-error>
               </mat-form-field>
               <mat-form-field class="half-width">
-                <input matInput formControlName="email" placeholder="Email" type="email" >
-                <mat-error *ngIf="feedbackForm.get('email').hasError('required') && feedbackForm.get('email').touched"> Email is required</mat-error>
+                <input matInput formControlName="email" placeholder="Email" type="email" email >
+                <mat-error *ngIf="formErrors.email"> {{formErrors.email}}</mat-error>
               </mat-form-field>
             </p>
             <p class="center-alignment">
@@ -126,6 +126,34 @@ export class ContactComponent implements OnInit {
   feedback: feedBackClass;
   contactTypeList = contactType;
 
+  formErrors = {
+    'firstname': '',
+    'lastname': '',
+    'telnum': '',
+    'email': ''
+  };
+
+  validationMessages = {
+    'firstname': {
+      'required': 'First Name is required.',
+      'minlength': 'First Name must be at least 2 characters long.',
+      'maxlength': 'First Name cannot be more than 25 characters long.'
+    },
+    'lastname': {
+      'required':      'Last Name is required.',
+      'minlength':     'Last Name must be at least 2 characters long.',
+      'maxlength':     'Last Name cannot be more than 25 characters long.'
+    },
+    'telnum': {
+      'required':      'Tel. number is required.',
+      'pattern':       'Tel. number must contain only numbers.'
+    },
+    'email': {
+      'required':      'Email is required.',
+      'email':         'Email not in valid format.'
+    }
+  };
+
   constructor(private fb: FormBuilder) {
     this.createForm();
   }
@@ -135,14 +163,36 @@ export class ContactComponent implements OnInit {
 
   createForm(){
     this.feedbackForm = this.fb.group({
-      firstname: ['', Validators.required],
-      lastname: ['', Validators.required],
-      telnum:['', Validators.required],
-      email: ['', Validators.required],
+      firstname: ['', [Validators.required,Validators.minLength(2),Validators.maxLength(25)]],
+      lastname: ['', [Validators.required,Validators.minLength(2),Validators.maxLength(25)]],
+      telnum:['', [Validators.required,Validators.pattern]],
+      email: ['', [Validators.required, Validators.email]],
       agree: false,
       contacttype: ['None', Validators.required],
       message: ''
     });
+    this.feedbackForm.valueChanges.subscribe(data => this.onValueChanged(data));
+    this.onValueChanged();
+  }
+
+  onValueChanged(data?: any) {
+    if (!this.feedbackForm) { return; }
+    const form = this.feedbackForm;
+    for (const field in this.formErrors) {
+      if (this.formErrors.hasOwnProperty(field)) {
+        // clear previous error message (if any)
+        this.formErrors[field] = '';
+        const control = form.get(field);
+        if (control && control.dirty && !control.valid) {
+          const messages = this.validationMessages[field];
+          for (const key in control.errors) {
+            if (control.errors.hasOwnProperty(key)) {
+              this.formErrors[field] += messages[key] + ' ';
+            }
+          }
+        }
+      }
+    }
   }
 
   onSubmit(){
