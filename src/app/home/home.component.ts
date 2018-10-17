@@ -31,9 +31,13 @@ import { LeaderService } from '../services/leader.service';
       </p>
       </mat-card-content>
       </mat-card>
-      <div [hidden]="dish">
+      <div [hidden]="dish || dishErrMess ">
         <mat-spinner></mat-spinner>
         <h4>Loading . . . Please wait</h4>
+      </div>
+      <div *ngIf="dishErrMess ">
+        <h2>Error</h2>
+        <h4>{{dishErrMess }}</h4>
       </div>
 
       <mat-card *ngIf="promotion" fxFlex>
@@ -80,7 +84,8 @@ export class HomeComponent implements OnInit {
 
   dish: DishClass;
   promotion: PromotionClass;
-  leader: LeaderClass
+  leader: LeaderClass;
+  dishErrMess : string;
 
   constructor(
       private dishService: DishService, 
@@ -90,7 +95,9 @@ export class HomeComponent implements OnInit {
   ){ }
 
   ngOnInit() {
-    this.dishService.getDishFeatured().subscribe(dish => this.dish = dish);
+    this.dishService.getDishFeatured()
+    .subscribe(dish => this.dish = dish,
+      errmess => this.dishErrMess = <any>errmess);
     this.promotionService.getPromotionFeatured().subscribe(promotion => this.promotion = promotion);
     this.leaderservice.getLeaderFeatured().subscribe(leader => this.leader = leader);
   }

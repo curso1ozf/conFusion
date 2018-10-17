@@ -23,9 +23,13 @@ import { DishService } from '../services/dish.service';
         </mat-grid-tile>
       </mat-grid-list>
     </div>
-    <div [hidden]="dishes">
+    <div [hidden]="dishes || errMess">
       <mat-spinner></mat-spinner>
       <h4>Loading . . . Please wait</h4>
+    </div>
+    <div *ngIf="errMess">
+      <h2>Error</h2>
+      <h4>{{errMess}}</h4>
     </div>
   `,
   styles: []
@@ -36,12 +40,15 @@ import { DishService } from '../services/dish.service';
 export class MenuComponent implements OnInit {
 
   dishes: DishClass[];
+  errMess: string;
 
   constructor( private dishService: DishService,
     @Inject('BaseURL') private BaseURL) { }
 
   ngOnInit() {
-    this.dishService.getDishes().subscribe(dishes => this.dishes = dishes);
+    this.dishService.getDishes()
+    .subscribe(dishes => this.dishes = dishes,
+      errmess => this.errMess = <any>errmess);
   }
 
 

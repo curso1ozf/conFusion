@@ -16,9 +16,13 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 @Component({
   selector: 'app-dishdetail',
   template: `
-    <div [hidden]="dish">
+    <div [hidden]="dish || errMess">
       <mat-spinner></mat-spinner>
       <h4>Loading . . . Please wait</h4>
+    </div>
+    <div *ngIf="errMess">
+      <h2>Error</h2>
+      <h4>{{errMess}}</h4>
     </div>
     <div  class="container" fxLayout="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutAlign.gt-md="space-around center">
       <div fxFlex *ngIf="dish">
@@ -139,6 +143,7 @@ export class DishdetailComponent implements OnInit {
   prev:number;
   next:number;
   dish: DishClass;
+  errMes: string;
   constructor( 
     private dishservice: DishService,
     private location: Location,
@@ -150,7 +155,9 @@ export class DishdetailComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.dishservice.getDishIds().subscribe(dishIds => this.dishIds = dishIds);
+    this.dishservice.getDishIds()
+    .subscribe(dishIds => this.dishIds = dishIds,
+      errmess => this.errMes = <any>errmess);
     this.route.params.pipe(switchMap((params: Params) =>  this.dishservice
       .getDish(+params['id'])))
       .subscribe(dish => {
