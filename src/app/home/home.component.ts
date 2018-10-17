@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 
 import { DishClass } from '../shared/dish';
 import { PromotionClass } from '../shared/promotion';
@@ -25,7 +25,7 @@ import { LeaderService } from '../services/leader.service';
         <h3>{{dish.name | uppercase}}</h3>
       </mat-card-title>
       </mat-card-header>
-      <img mat-card-image src={{dish.image}} alt={{dish.name}}>
+      <img mat-card-image src="{{ BaseURL + dish.image }}" alt={{dish.name}}>
       <mat-card-content>
       <p>{{dish.description}}
       </p>
@@ -85,7 +85,8 @@ export class HomeComponent implements OnInit {
   constructor(
       private dishService: DishService, 
       private promotionService: PromotionService, 
-      private leaderservice: LeaderService
+      private leaderservice: LeaderService,
+      @Inject('BaseURL') private BaseURL
   ){ }
 
   ngOnInit() {

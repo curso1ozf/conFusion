@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { DishClass } from '../shared/dish';
 import { DishService } from '../services/dish.service';
 
@@ -16,7 +16,7 @@ import { DishService } from '../services/dish.service';
     <div fxFlex *ngIf="dishes">
       <mat-grid-list cols="2" rowHeight="200px">
         <mat-grid-tile *ngFor="let dish of dishes" [routerLink]="['/dishdetail',dish.id]">
-          <img height="200px" src={{dish.image}} alt={{dish.name}}>
+          <img height="200px" src="{{BaseURL + dish.image}}" alt={{dish.name}}>
           <mat-grid-tile-footer>
             <h1 matLine>{{dish.name | uppercase}}</h1>
           </mat-grid-tile-footer>
@@ -37,7 +37,8 @@ export class MenuComponent implements OnInit {
 
   dishes: DishClass[];
 
-  constructor( private dishService: DishService) { }
+  constructor( private dishService: DishService,
+    @Inject('BaseURL') private BaseURL) { }
 
   ngOnInit() {
     this.dishService.getDishes().subscribe(dishes => this.dishes = dishes);

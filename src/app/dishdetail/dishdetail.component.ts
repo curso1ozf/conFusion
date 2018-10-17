@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { DishClass } from "../shared/dish";
 import { CommentClass } from "../shared/comment";
 
@@ -24,7 +24,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
       <div fxFlex *ngIf="dish">
         <mat-card>
           <mat-card-title> {{ dish.name | uppercase}} </mat-card-title>
-          <img mat-card-image src="{{ dish.image }}" height="400px">
+          <img mat-card-image src="{{ BaseURL + dish.image }}" height="400px">
           <mat-card-content> {{ dish.description }} </mat-card-content>
           <mat-card-actions>
             <button mat-button [routerLink] = "['/dishdetail',prev]">
@@ -143,7 +143,8 @@ export class DishdetailComponent implements OnInit {
     private dishservice: DishService,
     private location: Location,
     private route: ActivatedRoute,
-    private newCommentFormBuilder: FormBuilder
+    private newCommentFormBuilder: FormBuilder,
+    @Inject('BaseURL') private BaseURL
   ) {
       this.createForm();
    }
