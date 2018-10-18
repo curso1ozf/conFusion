@@ -11,6 +11,8 @@ import { switchMap } from 'rxjs/operators';
 
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
+import { trigger, animation, state, style, transition, animate} from '@angular/animations';
+
 
 
 @Component({
@@ -25,7 +27,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
       <h4>{{errMess}}</h4>
     </div>
     <div  class="container" fxLayout="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutAlign.gt-md="space-around center">
-      <div fxFlex *ngIf="dish">
+      <div fxFlex *ngIf="dish" [@visibility]="visibility">
         <mat-card>
           <mat-card-title> {{ dish.name | uppercase}} </mat-card-title>
           <img mat-card-image src="{{ BaseURL + dish.image }}" height="400px">
@@ -44,7 +46,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
           </mat-card-actions>
         </mat-card>
       </div>
-      <div fxFlex *ngIf="dish">
+      <div fxFlex *ngIf="dish" [@visibility]="visibility">
         <div>
           <h2>Comments</h2>
         </div>
@@ -113,7 +115,20 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
       align-items: center;
       margin:20px;
     }
-  `]
+  `],
+  animations: [
+    trigger('visibility',[
+      state('shown',style({
+        transform: 'scale(1.0)',
+        opacity: 1
+      })),
+      state('hidden', style({
+        transform: 'scale(0,5)',
+        opacity: 0
+      })),
+      transition('* => *', animate('0.5s ease-in-out'))
+    ])
+  ]
 })
 export class DishdetailComponent implements OnInit {
 
@@ -145,6 +160,8 @@ export class DishdetailComponent implements OnInit {
   dish: DishClass;
   dishcopy = null;
   errMes: string;
+  visibility = 'shown';
+
   constructor( 
     private dishservice: DishService,
     private location: Location,
@@ -159,12 +176,11 @@ export class DishdetailComponent implements OnInit {
     this.dishservice.getDishIds()
     .subscribe(dishIds => this.dishIds = dishIds,
       errmess => this.errMes = <any>errmess.message);
-    this.route.params.pipe(switchMap((params: Params) =>  this.dishservice
-      .getDish(+params['id'])))
-      .subscribe(dish => {
-        this.dish=dish;
-        this.setNextPrev(dish.id);
-      });
+    this.route.params.pipe(switchMap((params: Params) => { 
+      this.visibility = 'hidden'; 
+      return this.dishservice.getDish(+params['id']); }))
+      .subscribe(dish => { this.dish = dish; this.dishcopy = dish; this.setNextPrev(dish.id); this.visibility = 'shown'; },
+        errmess => this.errMes = <any>errmess);
   }
 
   createForm(){
