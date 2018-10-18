@@ -8,6 +8,8 @@ import { DishService } from '../services/dish.service';
 import { PromotionService } from '../services/promotion.service'; 
 import { LeaderService } from '../services/leader.service';
 
+import { flyInOut, expand } from '../animations/app.animations';
+
 @Component({
   selector: 'app-home',
   template: `
@@ -18,7 +20,7 @@ import { LeaderService } from '../services/leader.service';
     fxLayoutAlign.gt-md="space-around center"
     fxLayoutGap="10px">
 
-      <mat-card *ngIf="dish" fxFlex>
+      <mat-card *ngIf="dish" fxFlex [@expand]>
       <mat-card-header>
       <div mat-card-avatar></div>
       <mat-card-title>
@@ -40,7 +42,7 @@ import { LeaderService } from '../services/leader.service';
         <h4>{{dishErrMess }}</h4>
       </div>
 
-      <mat-card *ngIf="promotion" fxFlex>
+      <mat-card *ngIf="promotion" fxFlex [@expand]>
       <mat-card-header>
       <div mat-card-avatar></div>
       <mat-card-title>
@@ -58,7 +60,7 @@ import { LeaderService } from '../services/leader.service';
         <h4>Loading . . . Please wait</h4>
       </div>
 
-      <mat-card *ngIf="leader" fxFlex>
+      <mat-card *ngIf="leader" fxFlex [@expand]>
       <mat-card-header>
       <div mat-card-avatar></div>
       <mat-card-title>
@@ -78,7 +80,15 @@ import { LeaderService } from '../services/leader.service';
 
     </div>
   `,
-  styles: []
+  styles: [],
+  host: {
+    '[@flyInOut]': 'true',
+    'style':'display:block'
+  },
+  animations:[
+    flyInOut(),
+    expand()
+  ]
 })
 export class HomeComponent implements OnInit {
 

@@ -2,6 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { DishClass } from '../shared/dish';
 import { DishService } from '../services/dish.service';
 
+import { flyInOut, expand } from '../animations/app.animations';
+
 @Component({
   selector: 'app-menu',
   template: `
@@ -13,7 +15,7 @@ import { DishService } from '../services/dish.service';
         </div>
       </div>  
     
-    <div fxFlex *ngIf="dishes">
+    <div fxFlex *ngIf="dishes" [@expand]>
       <mat-grid-list cols="2" rowHeight="200px">
         <mat-grid-tile *ngFor="let dish of dishes" [routerLink]="['/dishdetail',dish.id]" appHighlight>
           <img height="200px" src="{{BaseURL + dish.image}}" alt={{dish.name}}>
@@ -32,7 +34,15 @@ import { DishService } from '../services/dish.service';
       <h4>{{errMess}}</h4>
     </div>
   `,
-  styles: []
+  styles: [],
+  host: {
+    '[@flyInOut]': 'true',
+    'style':'display:block'
+  },
+  animations:[
+    flyInOut(),
+    expand()
+  ]
 })
 
 

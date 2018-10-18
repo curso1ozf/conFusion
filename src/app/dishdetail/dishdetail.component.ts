@@ -11,7 +11,7 @@ import { switchMap } from 'rxjs/operators';
 
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
-import { trigger, animation, state, style, transition, animate} from '@angular/animations';
+import { visibility, flyInOut, expand } from '../animations/app.animations';
 
 
 
@@ -27,7 +27,7 @@ import { trigger, animation, state, style, transition, animate} from '@angular/a
       <h4>{{errMess}}</h4>
     </div>
     <div  class="container" fxLayout="row wrap" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="10px" fxLayoutAlign.gt-md="space-around center">
-      <div fxFlex *ngIf="dish" [@visibility]="visibility">
+      <div fxFlex *ngIf="dish" [@visibility]="visibility" [@expand]>
         <mat-card>
           <mat-card-title> {{ dish.name | uppercase}} </mat-card-title>
           <img mat-card-image src="{{ BaseURL + dish.image }}" height="400px">
@@ -46,7 +46,7 @@ import { trigger, animation, state, style, transition, animate} from '@angular/a
           </mat-card-actions>
         </mat-card>
       </div>
-      <div fxFlex *ngIf="dish" [@visibility]="visibility">
+      <div fxFlex *ngIf="dish" [@visibility]="visibility" [@expand]>
         <div>
           <h2>Comments</h2>
         </div>
@@ -116,18 +116,14 @@ import { trigger, animation, state, style, transition, animate} from '@angular/a
       margin:20px;
     }
   `],
-  animations: [
-    trigger('visibility',[
-      state('shown',style({
-        transform: 'scale(1.0)',
-        opacity: 1
-      })),
-      state('hidden', style({
-        transform: 'scale(0,5)',
-        opacity: 0
-      })),
-      transition('* => *', animate('0.5s ease-in-out'))
-    ])
+  host: {
+    '[@flyInOut]': 'true',
+    'style':'display:block'
+  },
+  animations:[
+    flyInOut(),
+    visibility(),
+    expand()
   ]
 })
 export class DishdetailComponent implements OnInit {

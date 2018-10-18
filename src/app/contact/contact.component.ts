@@ -3,6 +3,8 @@ import { feedBackClass,  contactType } from '../shared/feedback';
 
 import { FormGroup, Validators, FormBuilder, FormControl, EmailValidator } from '@angular/forms';
 
+import { flyInOut } from '../animations/app.animations';
+
 @Component({
   selector: 'app-contact',
   template: `
@@ -116,7 +118,14 @@ import { FormGroup, Validators, FormBuilder, FormControl, EmailValidator } from 
       align-items: center;
       margin:20px;
     }
-  `]
+  `],
+  host: {
+    '[@flyInOut]': 'true',
+    'style':'display:block'
+  },
+  animations:[
+    flyInOut()
+  ]
 })
 export class ContactComponent implements OnInit {
 

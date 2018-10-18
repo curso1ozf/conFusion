@@ -4,6 +4,7 @@ import { LeaderClass } from '../shared/leader';
 
 import { LeaderService } from '../services/leader.service';
 
+import { flyInOut, expand } from '../animations/app.animations';
 
 @Component({
   selector: 'app-about',
@@ -64,7 +65,7 @@ import { LeaderService } from '../services/leader.service';
     </div>
 
 
-    <div fxFlex *ngIf="leaders">
+    <div fxFlex *ngIf="leaders" [@expand]>
       <h2>Corporate Leadership</h2>
       <mat-list>
         <mat-list-item *ngFor="let leader of leaders">
@@ -85,7 +86,15 @@ import { LeaderService } from '../services/leader.service';
     </div>
   </div>
   `,
-  styles: []
+  styles: [],
+  host: {
+    '[@flyInOut]': 'true',
+    'style':'display:block'
+  },
+  animations:[
+    flyInOut(),
+    expand()
+  ]
 })
 export class AboutComponent implements OnInit {
   leaders: LeaderClass [];
