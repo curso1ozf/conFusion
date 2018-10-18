@@ -143,6 +143,7 @@ export class DishdetailComponent implements OnInit {
   prev:number;
   next:number;
   dish: DishClass;
+  dishcopy = null;
   errMes: string;
   constructor( 
     private dishservice: DishService,
@@ -211,7 +212,9 @@ export class DishdetailComponent implements OnInit {
     var date = new Date();
     this.newComment = this.newCommentForm.value;
     this.newComment.date = date.toISOString();
-    this.dish.comments.push(this.newComment);
+    this.dishcopy.comments.push(this.newComment);
+    this.dishcopy.save().
+      subscribe(dish => this.dish = dish);
     console.log(this.newComment);
     this.newCommentForm.reset({
       author: '',
