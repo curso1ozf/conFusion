@@ -157,7 +157,7 @@ export class DishdetailComponent implements OnInit {
   ngOnInit() {
     this.dishservice.getDishIds()
     .subscribe(dishIds => this.dishIds = dishIds,
-      errmess => this.errMes = <any>errmess);
+      errmess => this.errMes = <any>errmess.message);
     this.route.params.pipe(switchMap((params: Params) =>  this.dishservice
       .getDish(+params['id'])))
       .subscribe(dish => {
