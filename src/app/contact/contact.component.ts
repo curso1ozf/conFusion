@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { feedBackClass,  contactType } from '../shared/feedback';
 
+import { FeedbackService } from '../services/feedback.service'; 
+
 import { FormGroup, Validators, FormBuilder, FormControl, EmailValidator } from '@angular/forms';
 
-import { flyInOut } from '../animations/app.animations';
+import { flyInOut, visibility, expand } from '../animations/app.animations';
+
 
 @Component({
   selector: 'app-contact',
@@ -45,7 +48,24 @@ import { flyInOut } from '../animations/app.animations';
         </div>
       </div>
     </div>
-    <div fxFlex="50" fxFlexOffset="20px" class="form-size">
+    <div fxFlex="50" fxFlexOffset="20px" class="form-size" *ngIf="feedback" [hidden]="feedbackResponse" [@visibility]="visibility" [@expand]>
+      <h3>Leave your feedback </h3>
+      <h3>Submitting Form </h3>
+      <mat-spinner></mat-spinner>
+    </div>
+    <div fxFlex="50" fxFlexOffset="20px" class="form-size" *ngIf="feedbackResponse" [@visibility]="visibility" [@expand]>
+      <h3>Leave your feedback </h3>
+      <h3>Your submission </h3>
+      <p>First Name: {{ feedbackResponse.firstname }}</p>
+      <p>Last Name: {{ feedbackResponse.lastname }}</p>
+      <p>Tel. Number: {{ feedbackResponse.telnum }}</p>
+      <p>Email: {{ feedbackResponse.email }}</p>
+      <p>Contact You?: {{ feedbackResponse.agree }}</p>
+      <p>How?: {{ feedbackResponse.contacttype }}</p>
+      <p>Feedback: {{ feedbackResponse.message }}</p>
+      
+    </div>
+    <div fxFlex="50" fxFlexOffset="20px" class="form-size" [hidden]="feedback" [@visibility]="visibility" [@expand]>
       <h3>Leave your feedback </h3>
         <form novalidate [formGroup]="feedbackForm" class="form-size" (submit)="onSubmit()">
           <mat-dialog-content>
@@ -124,7 +144,9 @@ import { flyInOut } from '../animations/app.animations';
     'style':'display:block'
   },
   animations:[
-    flyInOut()
+    flyInOut(),
+    visibility(),
+    expand()
   ]
 })
 export class ContactComponent implements OnInit {
@@ -133,6 +155,8 @@ export class ContactComponent implements OnInit {
   
   feedbackForm: FormGroup;
   feedback: feedBackClass;
+  feedbackCopy = null;
+  feedbackResponse = null;
   contactTypeList = contactType;
 
   formErrors = {
@@ -163,7 +187,8 @@ export class ContactComponent implements OnInit {
     }
   };
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+    private feedBackService: FeedbackService) {
     this.createForm();
   }
 
@@ -205,8 +230,13 @@ export class ContactComponent implements OnInit {
   }
 
   onSubmit(){
-    this.feedback=this.feedbackForm.value;
-    console.log(this.feedback);
+    
+    this.feedbackCopy=this.feedbackForm.value;
+    let subscription = this.feedBackService.submitFeedback(this.feedbackCopy)
+      .subscribe(feedbackResponse => this.feedbackResponse = feedbackResponse);
+    this.feedback = this.feedbackCopy;
+    
+    console.log(this.feedbackCopy);
     this.feedbackForm.reset({
       firstname: '',
       lastname: '',
@@ -216,7 +246,14 @@ export class ContactComponent implements OnInit {
       contacttype: 'None',
       message: '' 
     });
-    this.feedbackFormDirective.resetForm();
+    console.log("feedbackrespose");
+    console.log(this.feedbackResponse);
+    setTimeout(() => {
+      this.feedbackResponse = null;
+      this.feedback = null;
+    }, 5000);
+    
+    //this.feedbackFormDirective.resetForm();
     
   }
 }

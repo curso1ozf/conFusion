@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 
 import { LeaderClass } from '../shared/leader';
 
@@ -69,7 +69,7 @@ import { flyInOut, expand } from '../animations/app.animations';
       <h2>Corporate Leadership</h2>
       <mat-list>
         <mat-list-item *ngFor="let leader of leaders">
-          <img matListAvatar src={{leader.image}} alt={{leader.name}}>
+          <img matListAvatar src="{{ BaseURL + leader.image}}" alt={{leader.name}}>
           <h3 matLine> {{leader.name}} </h3>
           <p matLine>
             <span> {{leader.designation}} </span>
@@ -99,7 +99,8 @@ import { flyInOut, expand } from '../animations/app.animations';
 export class AboutComponent implements OnInit {
   leaders: LeaderClass [];
   leaderErrMess: string;
-  constructor(private leaderservice: LeaderService) { }
+  constructor(private leaderservice: LeaderService,
+    @Inject('BaseURL') private BaseURL) { }
 
   ngOnInit() {
     this.leaderservice.getLeaders()

@@ -3,10 +3,6 @@ import { DishClass } from '../shared/dish';
 
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
-import { baseURL } from '../shared/baseurl';
-
-import { ProcessHTTPMsgService } from './process-httpmsg.service';
 import { Restangular } from 'ngx-restangular';
  
 
@@ -15,8 +11,7 @@ import { Restangular } from 'ngx-restangular';
 })
 export class DishService {
 
-  constructor(private http: HttpClient,
-    private processHTTPMsgService: ProcessHTTPMsgService,
+  constructor(
     private restangular: Restangular) { }
 
   getDishes(): Observable<DishClass[]> {

@@ -29,11 +29,10 @@ export function flyInOut() {
             })
         ]),
         transition(':leave', [
-            animate('500ms ease-out'),
-            style({
+            animate('500ms ease-out',style({
                 opacity: 0,
                 transform: 'translateX(100%)'
-            })
+            }))
         ])
     ])
 }

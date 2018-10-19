@@ -49,7 +49,7 @@ import { flyInOut, expand } from '../animations/app.animations';
         <h3>{{promotion.name | uppercase}}</h3>
       </mat-card-title>
       </mat-card-header>
-      <img mat-card-image src={{promotion.image}} alt={{promotion.name}}>
+      <img mat-card-image src="{{BaseURL + promotion.image}}" alt={{promotion.name}}>
       <mat-card-content>
       <p>{{promotion.description}}
       </p>
@@ -67,7 +67,7 @@ import { flyInOut, expand } from '../animations/app.animations';
         <h3>{{leader.name | uppercase}}</h3>
       </mat-card-title>
       </mat-card-header>
-      <img mat-card-image src={{leader.image}} alt={{promotion.name}}>
+      <img mat-card-image src="{{ BaseURL + leader.image}}" alt={{leader.name}}>
       <mat-card-content>
       <p>{{leader.description}}
       </p>
